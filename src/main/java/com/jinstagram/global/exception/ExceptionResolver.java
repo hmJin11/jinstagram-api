@@ -20,26 +20,26 @@ public class ExceptionResolver {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public Result defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, DataIntegrityViolationException e) {
         e.printStackTrace();
-        return new Result(String.valueOf(HttpStatus.BAD_REQUEST.value()),"duplicated",e);
+        return new Result(String.valueOf(HttpStatus.BAD_REQUEST.value()),"duplicated",e,null);
     }
     @ExceptionHandler(ServiceException.class)
     public Result defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, ServiceException e) {
         e.printStackTrace();
-        return new Result(String.valueOf(HttpStatus.BAD_REQUEST.value()),e.getMessage(),"");
+        return new Result(String.valueOf(HttpStatus.BAD_REQUEST.value()),e.getMessage(),"",null);
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public Result defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, IllegalArgumentException e) {
         e.printStackTrace();
-        return new Result(String.valueOf(HttpStatus.BAD_REQUEST.value()),e.getMessage(),"");
+        return new Result(String.valueOf(HttpStatus.BAD_REQUEST.value()),e.getMessage(),"",null);
     }
     @ExceptionHandler(AccessDeniedException.class)
     public Result defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) {
         e.printStackTrace();
-        return new Result(String.valueOf(HttpStatus.UNAUTHORIZED.value()),e.getMessage(),"");
+        return new Result(String.valueOf(HttpStatus.UNAUTHORIZED.value()),e.getMessage(),"",null);
     }
     @ExceptionHandler(Exception.class)
     public Result defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, Exception e) {
         e.printStackTrace();
-        return new Result(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),e.getMessage(),"");
+        return new Result(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),e.getMessage(),"",null);
     }
 }

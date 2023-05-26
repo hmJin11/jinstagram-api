@@ -32,6 +32,19 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
 
+    private static final String[] PERMIT_URL_ARRAY = {
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/api-docs/**",
+            "/v3/api-docs",
+            "/css/**",
+            "/images/**",
+            "/js/**",
+            "/favicon.ico",
+            "/api/v1/members/join", //회원가입
+            "/api/v1/members/login", // 로그인
+            "/login/oauth2/code/**" // 소셜로그인 returnUrl
+    };
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -46,7 +59,7 @@ public class SecurityConfig {
                 .headers((headers) -> headers.frameOptions((frameOptions) -> frameOptions.disable()))
                 .sessionManagement((sess) -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
-                        .requestMatchers("/css/**", "/images/**", "/js/**", "/favicon.ico", "/api/v1/members/join", "/api/v1/members/login").permitAll()
+                        .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                         .requestMatchers("/api/**").hasAnyRole("USER") // 회원가입,로그인 접근 가능
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated());
