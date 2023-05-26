@@ -1,2 +1,1 @@
-# jinstagram-api
-jinstagram-api
+# jinstargram-api
