@@ -20,7 +20,7 @@ public class ExceptionResolver {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public Result defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, DataIntegrityViolationException e) {
         e.printStackTrace();
-        return new Result(String.valueOf(HttpStatus.BAD_REQUEST.value()),"duplicated",e,null);
+        return new Result(String.valueOf(HttpStatus.BAD_REQUEST.value()),"duplicated",e.getMessage(),null);
     }
     @ExceptionHandler(ServiceException.class)
     public Result defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, ServiceException e) {

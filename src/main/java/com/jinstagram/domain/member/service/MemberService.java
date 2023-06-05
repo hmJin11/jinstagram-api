@@ -42,4 +42,8 @@ public class MemberService {
         Page<MemberResponse> members = memberRepository.searchMembers(memberSearch, pageable);
         return members;
     }
+
+    public Member findByEmail(String email){
+        return memberRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("등록된 회원이 아닙니다."));
+    }
 }
