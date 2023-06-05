@@ -16,9 +16,9 @@ public class MemberResponse {
     private String mobile;
     private String description;
     private String imageUrl;
-    private Long followings;
-    private Long followers;
-    private Long feedCnt;
+    private Long followings = 0L;
+    private Long followers = 0L;
+    private Long feedCnt = 0L;
     public MemberResponse(Member member){
         this.id = member.getId();
         this.name = member.getName();
