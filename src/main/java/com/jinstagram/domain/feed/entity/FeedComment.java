@@ -1,12 +1,12 @@
 package com.jinstagram.domain.feed.entity;
 
+import com.jinstagram.domain.BaseTimeEntity;
 import com.jinstagram.domain.member.entity.Member;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -14,11 +14,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @DynamicUpdate
-public class FeedComment {
+public class FeedComment  extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Column(name = "feed_comment_id")
     private Long id;
 
     @NotNull
@@ -36,10 +36,17 @@ public class FeedComment {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="parentCommentId")
-    private FeedComment feedComment;
+    @JoinColumn(name="parentFeedCommentId")
+    private FeedComment parentFeedComment;
+
+    @Column(nullable = false)
+    private Boolean deleted;
 
     public void updateComment(String contents){
         this.contents = contents;
+    }
+
+    public void deleteComment(){
+        this.deleted = true;
     }
 }

@@ -2,7 +2,9 @@ package com.jinstagram.controller.feed;
 
 import com.jinstagram.domain.feed.dto.*;
 import com.jinstagram.domain.feed.entity.Feed;
+import com.jinstagram.domain.feed.entity.FeedComment;
 import com.jinstagram.domain.feed.entity.FeedImage;
+import com.jinstagram.domain.feed.service.FeedCommentService;
 import com.jinstagram.domain.feed.service.FeedImageService;
 import com.jinstagram.domain.feed.service.FeedLikeService;
 import com.jinstagram.domain.feed.service.FeedService;
@@ -36,6 +38,7 @@ public class FeedController {
     private final FeedService feedService;
     private final FeedLikeService feedLikeService;
     private final FeedImageService feedImageService;
+    private final FeedCommentService feedCommentService;
     @GetMapping(value = "/{id}")
     @Operation(summary = "단건조회", description = "단건조회")
     public Result getFeed(@PathVariable(value = "id") Long id){
@@ -88,10 +91,37 @@ public class FeedController {
     }
 
 
-    @PostMapping("/like/{id}")
+    @PostMapping(value="/like/{id}")
     @Operation(summary = "피드 좋아요, 취소", description = "피드 좋아요, 취소")
     public Result likeFeed(@PathVariable(value = "id") Long id){
         return new Result(feedLikeService.likeFeed(id));
     }
 
+    @PostMapping(value="/comments")
+    public Result saveFeedComment(@RequestBody FeedCommentRequest feedCommentRequest){
+        FeedCommentResponse feedCommentResponse = new FeedCommentResponse(feedCommentService.registerComment(feedCommentRequest));
+        return new Result(feedCommentResponse);
+    }
+
+    @PutMapping(value="/comments")
+    public Result updateFeedComment(@RequestBody FeedCommentRequest feedCommentRequest){
+        FeedCommentResponse feedCommentResponse = new FeedCommentResponse(feedCommentService.updateComment(feedCommentRequest));
+        return new Result(feedCommentResponse);
+    }
+
+    @GetMapping(value="/comments")
+    public Result getFeedComments(@RequestBody FeedCommentRequest feedCommentRequest){
+        return new Result(feedCommentService.getComments(feedCommentRequest));
+    }
+
+    @GetMapping(value="/comments/{id}")
+    public Result getFeedChildComments(@PathVariable(value = "id") Long parentCommentId ){
+        return new Result(feedCommentService.getComments(parentCommentId));
+    }
+
+    @DeleteMapping(value="/comments/{id}")
+    public Result deleteFeedComment(@PathVariable(value = "id") Long commentId){
+        feedCommentService.deleteComment(commentId);
+        return new Result("");
+    }
 }

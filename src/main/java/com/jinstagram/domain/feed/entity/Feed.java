@@ -32,9 +32,10 @@ public class Feed extends BaseTimeEntity {
     @Column(nullable = false)
     private Boolean deleted;
     @Builder
-    public Feed (Member member, String contents){
+    public Feed (Member member, String contents, Boolean deleted){
         this.member = member;
         this.contents = contents;
+        this.deleted = deleted;
     }
 
     public void updateFeed(String contents){

@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class FeedService {
     private final FeedRepository feedRepository;
     private final MemberService memberService;
-    private final FeedImageService feedImageService;
 
     public Feed postFeed(FeedPostRequest feedPostRequest) throws Exception {
         Member member = memberService.findByEmail(SecurityUtil.getCurrentEmail());

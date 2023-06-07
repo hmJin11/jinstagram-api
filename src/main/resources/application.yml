@@ -1,4 +1,3 @@
-
 spring:
   profiles:
     group:
@@ -30,7 +29,7 @@ spring:
         show_sql: true
 
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 springdoc:
   api-docs:
     path: /api-docs

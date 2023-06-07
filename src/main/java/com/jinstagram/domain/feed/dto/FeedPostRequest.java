@@ -14,13 +14,13 @@ public class FeedPostRequest {
     private String contents;
     private MultipartFile[] imageFile;
     private String fileKey;
-    private Boolean deleted = false;
     private Member member;
 
     public Feed toEntity(){
         return Feed.builder()
                 .contents(this.contents)
                 .member(this.member)
+                .deleted(false)
                 .build();
     }
 }
