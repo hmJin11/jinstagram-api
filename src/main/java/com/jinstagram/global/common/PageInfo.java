@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class PageInfo {
     private int pageNum;
     private int pageSize;
-    private int totalElements;
+    private int totalCount;
     private int totalPages;
 }

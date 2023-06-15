@@ -1,7 +1,7 @@
 package com.jinstagram.domain.feed.service;
 
-import com.jinstagram.domain.feed.dto.FeedCommentRequest;
-import com.jinstagram.domain.feed.dto.FeedCommentResponse;
+import com.jinstagram.domain.feed.dto.request.FeedCommentRequest;
+import com.jinstagram.domain.feed.dto.response.FeedCommentResponse;
 import com.jinstagram.domain.feed.entity.Feed;
 import com.jinstagram.domain.feed.entity.FeedComment;
 import com.jinstagram.domain.feed.repository.FeedCommentRepository;
@@ -57,17 +57,13 @@ public class FeedCommentService {
     @Transactional(readOnly=true)
     public List<FeedCommentResponse> getComments(FeedCommentRequest feedCommentRequest) {
         List<FeedCommentResponse> list = feedCommentRepository.findByFeedIdAndParentFeedCommentIsNull(feedCommentRequest.getFeedId()).stream().map(s -> new FeedCommentResponse(s)).collect(Collectors.toList());
-        for (FeedCommentResponse response : list){
-            response.setChildCommentCnt(feedCommentRepository.countByParentFeedCommentId(response.getId()));
-        }
+        list.forEach(f -> f.setChildCommentCnt(feedCommentRepository.countByParentFeedCommentId(f.getId())));
         return list;
     }
     @Transactional(readOnly=true)
     public List<FeedCommentResponse> getComments(Long parentComentId) {
         List<FeedCommentResponse> list = feedCommentRepository.findByParentFeedCommentId(parentComentId).stream().map(s -> new FeedCommentResponse(s)).collect(Collectors.toList());
-        for (FeedCommentResponse response : list){
-            response.setChildCommentCnt(feedCommentRepository.countByParentFeedCommentId(response.getId()));
-        }
+        list.forEach(f -> f.setChildCommentCnt(feedCommentRepository.countByParentFeedCommentId(f.getId())));
         return list;
     }
     private void checkAuthority(FeedComment feedComment, Member member){

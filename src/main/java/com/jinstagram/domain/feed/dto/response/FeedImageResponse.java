@@ -1,4 +1,4 @@
-package com.jinstagram.domain.feed.dto;
+package com.jinstagram.domain.feed.dto.response;
 
 import com.jinstagram.domain.feed.entity.FeedImage;
 import lombok.AccessLevel;

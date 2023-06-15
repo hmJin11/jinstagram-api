@@ -41,21 +41,19 @@ public class FollowService {
         Follow follow = followRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("팔로잉 하고 있지 않습니다."));
         followRepository.delete(follow);
     }
-
+    @Transactional(readOnly = true)
     public Page<FollowResponse> followings(Long fromMemberId, Pageable pageable) {
-        Page<FollowResponse> followings = followRepository.followings(fromMemberId,pageable);
         Member loginMember = memberService.findByEmail(SecurityUtil.getCurrentEmail());
-        for (FollowResponse followResponse : followings.getContent()){
-            followResponse.setFollow(isFollow(loginMember.getId(), followResponse.getMemberId()));
-        }
+        Page<FollowResponse> followings = followRepository.followings(fromMemberId,pageable);
+        followings.getContent().forEach(f->f.setFollow(isFollow(loginMember.getId(), f.getMemberId())));
         return followings;
     }
+
+    @Transactional(readOnly = true)
     public Page<FollowResponse> followers(Long toMemberId, Pageable pageable) {
-        Page<FollowResponse> followers = followRepository.followers(toMemberId,pageable);
         Member loginMember = memberService.findByEmail(SecurityUtil.getCurrentEmail());
-        for (FollowResponse followResponse : followers.getContent()){
-            followResponse.setFollow(isFollow(loginMember.getId(), followResponse.getMemberId()));
-        }
+        Page<FollowResponse> followers = followRepository.followers(toMemberId,pageable);
+        followers.getContent().forEach(f -> f.setFollow(isFollow(loginMember.getId(), f.getMemberId())));
         return followers;
     }
 

@@ -1,4 +1,4 @@
-package com.jinstagram.domain.feed.dto;
+package com.jinstagram.domain.feed.dto.request;
 
 import com.jinstagram.domain.feed.entity.Feed;
 import com.jinstagram.domain.member.entity.Member;

@@ -1,6 +1,6 @@
 package com.jinstagram.domain.feed.repository;
 
-import com.jinstagram.domain.feed.dto.FeedResponse;
+import com.jinstagram.domain.feed.dto.response.FeedResponse;
 import com.jinstagram.domain.feed.dto.FeedSearch;
 import com.jinstagram.domain.feed.entity.Feed;
 import com.jinstagram.domain.feed.entity.QFeed;
@@ -35,7 +35,9 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
                                 FeedResponse.class,
                                 feed.id,
                                 feed.contents,
+                                member.id.as("memberId"),
                                 member.nickname,
+                                feed.modifiedDate,
                                 ExpressionUtils.as(
                                 JPAExpressions.select(feedLike.count())
                                         .from(feedLike)

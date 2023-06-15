@@ -28,9 +28,7 @@ public class FeedImageService {
     private final MemberService memberService;
     public void uploadImage(Feed feed, MultipartFile[] file) throws Exception{
         Member member = memberService.findByEmail(SecurityUtil.getCurrentEmail());
-        for (FeedImage image : feedImageRepository.findByFeedId(feed.getId())){
-            image.deleteImage();
-        }
+        feedImageRepository.findByFeedId(feed.getId()).forEach(i -> i.deleteImage());
 
         for (MultipartFile multipartFile : file) {
             FileRequest fileRequest = fileService.uploadFile(multipartFile, String.format("/feed/%s/%s/", member.getId(), LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));

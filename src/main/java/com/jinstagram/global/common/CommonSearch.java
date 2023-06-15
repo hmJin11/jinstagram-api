@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommonSearch {
-    private int pageNum = 0;
+    private int pageNum = 1;
     private int pageSize = 10;
     private String searchString;
 }

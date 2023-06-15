@@ -1,4 +1,4 @@
-package com.jinstagram.domain.feed.dto;
+package com.jinstagram.domain.feed.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

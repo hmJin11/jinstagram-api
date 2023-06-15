@@ -1,14 +1,13 @@
 package com.jinstagram.domain.feed.service;
 
-import com.jinstagram.domain.feed.dto.FeedPostRequest;
-import com.jinstagram.domain.feed.dto.FeedResponse;
+import com.jinstagram.domain.feed.dto.request.FeedPostRequest;
+import com.jinstagram.domain.feed.dto.response.FeedResponse;
 import com.jinstagram.domain.feed.dto.FeedSearch;
-import com.jinstagram.domain.feed.dto.FeedUpdateRequest;
+import com.jinstagram.domain.feed.dto.request.FeedUpdateRequest;
 import com.jinstagram.domain.feed.entity.Feed;
 import com.jinstagram.domain.feed.repository.FeedRepository;
 import com.jinstagram.domain.member.entity.Member;
 import com.jinstagram.domain.member.service.MemberService;
-import com.jinstagram.global.common.service.FileService;
 import com.jinstagram.global.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

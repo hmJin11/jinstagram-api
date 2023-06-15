@@ -39,7 +39,6 @@ public class FeedComment  extends BaseTimeEntity {
     @JoinColumn(name="parentFeedCommentId")
     private FeedComment parentFeedComment;
 
-    @Column(nullable = false)
     private Boolean deleted;
 
     public void updateComment(String contents){

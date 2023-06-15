@@ -1,8 +1,11 @@
 package com.jinstagram.controller.member;
 
 import com.jinstagram.domain.follow.dto.FollowResponse;
+import com.jinstagram.domain.follow.dto.FollowerListResponse;
+import com.jinstagram.domain.follow.dto.FollowingListResponse;
 import com.jinstagram.domain.follow.service.FollowService;
 import com.jinstagram.domain.member.dto.MemberJoinRequest;
+import com.jinstagram.domain.member.dto.MemberListResponse;
 import com.jinstagram.domain.member.dto.MemberResponse;
 import com.jinstagram.domain.member.dto.MemberSearch;
 import com.jinstagram.domain.member.service.MemberService;
@@ -16,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -50,9 +52,10 @@ public class MemberController {
         MemberSearch search = new MemberSearch();
         if (memberSearch != null)
             search = memberSearch;
-        Pageable pageable = PageRequest.of(search.getPageNum() , search.getPageSize());
+        Pageable pageable = PageRequest.of(search.getPageNum()-1 , search.getPageSize());
         Page<MemberResponse> memberResponses = memberService.searchMembers(search, pageable);
-        return new Result(memberResponses.getContent(), new PageInfo(pageable.getPageNumber(), pageable.getPageSize(), (int) memberResponses.getTotalElements(),memberResponses.getTotalPages()));
+        MemberListResponse memberListResponse = new MemberListResponse(memberResponses.getContent(), new PageInfo(search.getPageNum(), search.getPageSize(), (int) memberResponses.getTotalElements(), memberResponses.getTotalPages()));
+        return new Result(memberListResponse);
     }
 
     @PostMapping(value = "/follow/{id}")
@@ -60,25 +63,29 @@ public class MemberController {
     public Result follow(@PathVariable(value = "id") Long toMemberId){
         return new Result(followService.follow(toMemberId));
     }
+
     @GetMapping(value = "/followings/{id}")
     @Operation(summary = "팔로윙 조회", description = "팔로우 하고있는 사람")
     public Result followings(@PathVariable(value = "id") Long fromMemberId, @RequestBody(required = false) CommonSearch commonSearch){
         CommonSearch search = new CommonSearch();
         if (commonSearch != null)
             search = commonSearch;
-        Pageable pageable = PageRequest.of(search.getPageNum() , search.getPageSize());
+        Pageable pageable = PageRequest.of(search.getPageNum()-1 , search.getPageSize());
         Page<FollowResponse> followings = followService.followings(fromMemberId, pageable);
-        return new Result(followings.getContent(), new PageInfo(pageable.getPageNumber(), pageable.getPageSize(), (int) followings.getTotalElements(),followings.getTotalPages()));
+        FollowingListResponse followingListResponse = new FollowingListResponse(followings.getContent(), new PageInfo(search.getPageNum(), search.getPageSize(), (int) followings.getTotalElements(), followings.getTotalPages()));
+        return new Result(followingListResponse);
     }
+
     @GetMapping(value = "/followers/{id}")
     @Operation(summary = "팔로워 조회", description = "나를 팔로우 하고 있는사람")
     public Result followers(@PathVariable(value = "id") Long toMemberId, @RequestBody(required = false) CommonSearch commonSearch){
         CommonSearch search = new CommonSearch();
         if (commonSearch != null)
             search = commonSearch;
-        Pageable pageable = PageRequest.of(search.getPageNum() , search.getPageSize());
-        Page<FollowResponse> followings = followService.followers(toMemberId, pageable);
-        return new Result(followings.getContent(), new PageInfo(pageable.getPageNumber(), pageable.getPageSize(), (int) followings.getTotalElements(),followings.getTotalPages()));
+        Pageable pageable = PageRequest.of(search.getPageNum()-1 , search.getPageSize());
+        Page<FollowResponse> followers = followService.followers(toMemberId, pageable);
+        FollowerListResponse followerListResponse = new FollowerListResponse(followers.getContent(), new PageInfo(search.getPageNum(), search.getPageSize(), (int) followers.getTotalElements(), followers.getTotalPages()));
+        return new Result(followerListResponse);
     }
 
 }

@@ -1,9 +1,14 @@
 package com.jinstagram.controller.feed;
 
 import com.jinstagram.domain.feed.dto.*;
+import com.jinstagram.domain.feed.dto.request.FeedCommentRequest;
+import com.jinstagram.domain.feed.dto.response.FeedCommentResponse;
+import com.jinstagram.domain.feed.dto.request.FeedPostRequest;
+import com.jinstagram.domain.feed.dto.request.FeedUpdateRequest;
+import com.jinstagram.domain.feed.dto.response.FeedImageResponse;
+import com.jinstagram.domain.feed.dto.response.FeedListResponse;
+import com.jinstagram.domain.feed.dto.response.FeedResponse;
 import com.jinstagram.domain.feed.entity.Feed;
-import com.jinstagram.domain.feed.entity.FeedComment;
-import com.jinstagram.domain.feed.entity.FeedImage;
 import com.jinstagram.domain.feed.service.FeedCommentService;
 import com.jinstagram.domain.feed.service.FeedImageService;
 import com.jinstagram.domain.feed.service.FeedLikeService;
@@ -14,18 +19,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tika.Tika;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 @RestController
@@ -53,12 +51,12 @@ public class FeedController {
         if (feedSearch != null){
             search = feedSearch;
         }
-        Pageable pageable = PageRequest.of(search.getPageNum() , search.getPageSize());
+        Pageable pageable = PageRequest.of(search.getPageNum()-1 , search.getPageSize());
         Page<FeedResponse> feedResponses = feedService.getFeeds(search, pageable);
-        for (FeedResponse feed : feedResponses.getContent()){
-            feed.setFeedImages(feedImageService.getFeedImages(feed.getId()).stream().map(s -> new FeedImageResponse(s)).collect(Collectors.toList()));
-        }
-        return new Result(feedResponses.getContent(), new PageInfo(pageable.getPageNumber(), pageable.getPageSize(), (int) feedResponses.getTotalElements(),feedResponses.getTotalPages()));
+        feedResponses.getContent().forEach(feed -> feed.setFeedImages(feedImageService.getFeedImages(feed.getId()).stream().map(s -> new FeedImageResponse(s)).collect(Collectors.toList())));
+        FeedListResponse feedListResponse = new FeedListResponse(feedResponses.getContent(), new PageInfo(search.getPageNum(), search.getPageSize(), (int) feedResponses.getTotalElements(), feedResponses.getTotalPages()));
+
+        return new Result(feedListResponse);
     }
 
     @PostMapping
